@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\AIPatrolController.cs" />
     <Compile Include="Assets\Scripts\AISteeringController.cs" />
     <Compile Include="Assets\Scripts\Agent.cs" />
+    <Compile Include="Assets\Scripts\FlockSystem.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/s209062/Desktop/TempFilesJosephHuskey/AIUnitRepo/AIDevelopment/AIUnit/AIMovementProject/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
