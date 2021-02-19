@@ -60,16 +60,15 @@ public class FleeSteering : SteeringBehavior
 }
 public class WanderSteering : SteeringBehavior 
 {
-    public Transform Randtarget;
-    public float allowedRadius = 10f;
+    public float distance = 8.0f;
+    public float allowedRadius = 5f;
     public override Vector3 Steer(AISteeringController controller)
     {
-        Vector3 minPosition = new Vector3(controller.agent.transform.position.x - allowedRadius, controller.agent.transform.position.y, controller.agent.transform.position.z - allowedRadius);
-        Vector3 maxPosition = new Vector3(controller.agent.transform.position.x + allowedRadius, controller.agent.transform.position.y, controller.agent.transform.position.z + allowedRadius);
-        Randtarget.position = new Vector3(Random.Range(minPosition.x, maxPosition.x), controller.agent.transform.position.y, Random.Range(minPosition.z, maxPosition.z));
-       // Randtarget.
-       //TODO finish this and pursue and do flock!
-        return (Randtarget.position - controller.transform.position).normalized * controller.maxSpeed;
+        Vector3 offset = Random.onUnitSphere * allowedRadius;
+        offset.y = 0.0f;
+        offset += controller.transform.forward * distance;
+        Vector3 offsetPosition = controller.transform.position + offset;
+        return (offsetPosition - controller.transform.position).normalized * controller.maxSpeed;
     }
 }
 public class PursueSteering : SteeringBehavior 
