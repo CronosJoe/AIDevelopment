@@ -70,4 +70,9 @@ public class PathFindingBehavior : MonoBehaviour
     }
 
     //TODO add in a distance/target method to find a tile
+    void distanceToTarget(Tile origin, Tile destination) 
+    {
+     //redo this entire method last implementation only worked in 2 directions
+
+    }
 }
