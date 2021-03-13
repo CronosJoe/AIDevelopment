@@ -15,5 +15,5 @@ public class Tile : MonoBehaviour
     {
         fScore = gScore + hScore;
     }
-
+    
 }
