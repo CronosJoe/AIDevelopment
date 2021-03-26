@@ -10,7 +10,7 @@ public class Tile : MonoBehaviour
     public int hScore;// direct cost
     public Tile previousTile;//used for tracking which tile came before this one got set to the current
 
-
+    public bool isWalkable; //this will let me set up obstacle avoidance through A*
     public void CalculateFScore() 
     {
         fScore = gScore + hScore;

@@ -26,7 +26,6 @@ public class PathFindingBehavior : MonoBehaviour
         tiles = new Tile[GridWidth, GridHeight];
         spawnTiles();
     }
-
     void spawnTiles() 
     {
         Vector3 offset = Vector3.zero;
@@ -36,6 +35,7 @@ public class PathFindingBehavior : MonoBehaviour
             {
                 GameObject newTile = Instantiate(prefab, transform.position + offset, transform.rotation);
                 tiles[i,j] = newTile.GetComponent<Tile>();
+                tiles[i, j].isWalkable = true; //starting off each tile as walkable
                 offset.x += 1.0f;
             }
             offset.x = 0f;
@@ -103,7 +103,11 @@ public class PathFindingBehavior : MonoBehaviour
             foreach(Tile neighborTile in GetNeighbors(currentNode))//should iterate through every neighbor
             {
                 if (closedList.Contains(neighborTile)) continue;
-
+                if (!neighborTile.isWalkable) 
+                {
+                    closedList.Add(neighborTile);
+                    continue; //move onto next iteration!
+                }
                 int tentativeGCost = currentNode.gScore + CalculateDistanceCost(currentNode, neighborTile);
                 if (tentativeGCost < neighborTile.gScore)
                 {
