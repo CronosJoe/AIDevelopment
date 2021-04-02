@@ -16,6 +16,8 @@ public class AISteeringController : MonoBehaviour
     public Transform seekTarget;
 
     public PathFindingBehavior pathFinder;
+    private Tile currentTile;
+    private Tile targetTile;
     
     protected Vector3 CalculateSteeringForce()
     {
@@ -32,7 +34,6 @@ public class AISteeringController : MonoBehaviour
         else
         {
             //this will be an attack / obstacle spawner
-
         }
         //clamp it
         steeringForce = Vector3.ClampMagnitude(steeringForce, maxForce);
@@ -41,24 +42,46 @@ public class AISteeringController : MonoBehaviour
     public bool checkObstacles(Vector3 direction) //gonna try and use the steering force as a direction
     {
         //I plan to use a raycast to check obstacles or walls in front of the enemy AI
-        int layerMask = 1 << 9; //setting the layer mask so it will only collide with objects on layer 8
+        int layerMask = 1 << 9; //setting the layer mask so it will only collide with objects on layer 9
 
         RaycastHit hit; //setting our hit
         //these will also call a method that will adjust for the obstacle avoidance
         if (Physics.Raycast(transform.position, direction, out hit, Mathf.Infinity, layerMask)) //shooting the raycast
         { 
-            Debug.DrawRay(transform.position, direction * hit.distance, Color.yellow); //debugging tools
-            Debug.Log("Did Hit" + direction);
             return true;
         }
         else
         {
-            
-            Debug.DrawRay(transform.position, direction * 1000, Color.white);
-            Debug.Log("Did not Hit" + direction);
             return false;
         }
         //okay this works now I have to program something to move around the obstacle, maybe I should go back to the A* pathfinding to seek my way around the obstacle
+
+    }
+    public void setCurrentTile() 
+    {
+        int layerMask = 1 << 8;
+        RaycastHit hit;
+
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, layerMask)) 
+        {
+            currentTile = hit.transform.GetComponent<Tile>();
+        }
+        else 
+        {
+            Debug.Log("Something went very wrong");
+        }
+
+    }
+    public void findTargetTile() 
+    {
+
+        int layerMask = 1 << 8;
+        RaycastHit hit;
+        Vector3 angleFourtyFive = new Vector3(0, 0, 1);
+        if (Physics.Raycast(transform.position, angleFourtyFive , out hit, Mathf.Infinity, layerMask))
+        {
+
+        }
 
     }
     private void Start() //I don't see a world where I will ever "call" the Start method since it will be used when the program starts
@@ -68,18 +91,21 @@ public class AISteeringController : MonoBehaviour
     }
     private void Update()//another method that auto activates and shouldn't be called by me
     {
+        setCurrentTile();
         Vector3 steeringForce = CalculateSteeringForce();
         agent.velocity = Vector3.ClampMagnitude(agent.velocity + steeringForce, maxSpeed); //give em the clamps clamps
+        if(agent.velocity != Vector3.zero)
+        agent.transform.forward = agent.velocity;
         if (!checkObstacles(steeringForce))
         {
             agent.UpdateMovement();
         }
         else
         {
+            
             //we're going to steer down the optimal tile path using seek with the target on every tile in the returned path list
+            // List<Tile> avoidObstacle = pathFinder.FindPath(currentTile,);
         }
-        
-       
     }
 }//Steering controller
 

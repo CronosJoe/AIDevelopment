@@ -70,7 +70,7 @@ public class PathFindingBehavior : MonoBehaviour
         }
         return bestTile; //returning the lowest fScore node from the open list
     }
-    private List<Tile> FindPath(Tile startNode, Tile targetNode) //we're going to assume I have a node that the ai will start on, probably through raycast or collision, and then we will return the pathing
+    public List<Tile> FindPath(Tile startNode, Tile targetNode) //we're going to assume I have a node that the ai will start on, probably through raycast or collision, and then we will return the pathing
     {
         openList = new List<Tile> { startNode }; //starting with the startnode in the open list
         closedList = new List<Tile>();
