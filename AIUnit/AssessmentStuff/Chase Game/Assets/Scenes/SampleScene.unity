@@ -346,6 +346,7 @@ MonoBehaviour:
   maxForce: 5
   fleeSeekDist: 5
   seekTarget: {fileID: 2133970824}
+  pathFinder: {fileID: 648856603}
 --- !u!54 &192295981
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -487,6 +488,8 @@ MonoBehaviour:
   GridWidth: 40
   GridHeight: 40
   prefab: {fileID: 3982497862125401220, guid: 33551ca1c8d6fa04fa3cb94a8620a9dd, type: 3}
+  foundHeight: 0
+  foundWidth: 0
 --- !u!4 &648856604
 Transform:
   m_ObjectHideFlags: 0

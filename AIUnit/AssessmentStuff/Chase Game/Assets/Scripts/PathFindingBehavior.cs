@@ -60,11 +60,12 @@ public class PathFindingBehavior : MonoBehaviour
     private Tile GetCheapestFTile(List<Tile> openList)
     {
         Tile bestTile = null;
-        bestTile.fScore = int.MaxValue; //this will be overwritten with the other tiles
+        int currentScore = int.MaxValue;
         for (int i = 0; i < openList.Count; i++)
         {
-            if (openList[i].fScore < bestTile.fScore)
+            if (openList[i].fScore < currentScore)
             {
+                currentScore = openList[i].fScore;
                 bestTile = openList[i];//overwriting
             }
         }
@@ -134,22 +135,22 @@ public class PathFindingBehavior : MonoBehaviour
         //add the the top neighboring tiles
         if (!(foundHeight == 0)) //if the height is zero then the tiles above the current node simply wouldn't exist
         {
-            neighbors.Add(tiles[foundHeight - 1,foundWidth-1]); //top left
-            neighbors.Add(tiles[foundHeight - 1, foundWidth]); //directly above
-            neighbors.Add(tiles[foundHeight - 1, foundWidth + 1]); //top right
+            neighbors.Add(tiles[foundHeight - 1,foundWidth - 1]); //left top
+            neighbors.Add(tiles[foundHeight - 1, foundWidth]); //directly left
+            neighbors.Add(tiles[foundHeight - 1, foundWidth + 1]); //bottom left
         }
         //to the left
-        if (!(foundWidth == 0)) //make sure there is a node to the left
+        if (!(foundWidth == 0)) //make sure there is a node above
         {
             neighbors.Add(tiles[foundHeight, foundWidth - 1]);
         }
         //to the right
-        if(!(foundWidth == (GridWidth-1))) //make sure there is a node to the right
+        if(!(foundWidth == (GridWidth - 1))) //make sure there is a node below
         {
             neighbors.Add(tiles[foundHeight, foundWidth + 1]);
         }
         //finally below
-        if (!(foundHeight == (GridHeight-1)))
+        if (!(foundHeight == (GridHeight - 1)))
         {
             neighbors.Add(tiles[foundHeight + 1, foundWidth - 1]); //bottom left
             neighbors.Add(tiles[foundHeight + 1, foundWidth]); //directly below

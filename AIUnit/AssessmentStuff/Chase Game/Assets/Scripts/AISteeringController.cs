@@ -14,7 +14,6 @@ public class AISteeringController : MonoBehaviour
     List<SteeringBehavior> steerings = new List<SteeringBehavior>();
     [Header("Important Transforms")]
     public Transform seekTarget;
-
     public PathFindingBehavior pathFinder;
     private Tile currentTile;
     private Tile targetTile;
@@ -38,6 +37,12 @@ public class AISteeringController : MonoBehaviour
         //clamp it
         steeringForce = Vector3.ClampMagnitude(steeringForce, maxForce);
         return steeringForce;
+    }
+    protected Vector3 WalkTheRoad(Tile pathTarget) 
+    {
+       
+            return (pathTarget.transform.position - transform.position).normalized * maxSpeed;
+     
     }
     public bool checkObstacles(Vector3 direction) //gonna try and use the steering force as a direction
     {
@@ -77,10 +82,12 @@ public class AISteeringController : MonoBehaviour
 
         int layerMask = 1 << 8;
         RaycastHit hit;
-        Vector3 angleFourtyFive = new Vector3(0, 0, 1);
+        Vector3 angleFourtyFive = new Vector3(0, -1, 10);
+        angleFourtyFive = agent.transform.TransformDirection(angleFourtyFive);
+        Debug.DrawRay(agent.transform.position, angleFourtyFive, Color.red);
         if (Physics.Raycast(transform.position, angleFourtyFive , out hit, Mathf.Infinity, layerMask))
         {
-
+            targetTile = hit.transform.GetComponent<Tile>();
         }
 
     }
@@ -92,6 +99,7 @@ public class AISteeringController : MonoBehaviour
     private void Update()//another method that auto activates and shouldn't be called by me
     {
         setCurrentTile();
+        findTargetTile();
         Vector3 steeringForce = CalculateSteeringForce();
         agent.velocity = Vector3.ClampMagnitude(agent.velocity + steeringForce, maxSpeed); //give em the clamps clamps
         if(agent.velocity != Vector3.zero)
@@ -102,9 +110,14 @@ public class AISteeringController : MonoBehaviour
         }
         else
         {
-            
             //we're going to steer down the optimal tile path using seek with the target on every tile in the returned path list
-            // List<Tile> avoidObstacle = pathFinder.FindPath(currentTile,);
+             List<Tile> avoidObstacle = pathFinder.FindPath(currentTile,targetTile);
+            for(int i = 0; i < avoidObstacle.Count; i++) 
+            {
+                steeringForce = WalkTheRoad(avoidObstacle[i]);
+                agent.velocity = Vector3.ClampMagnitude(agent.velocity + steeringForce, maxSpeed); //give em the clamps clamps
+                agent.UpdateMovement();
+            }
         }
     }
 }//Steering controller
