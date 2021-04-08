@@ -135,9 +135,15 @@ public class PathFindingBehavior : MonoBehaviour
         //add the the top neighboring tiles
         if (!(foundHeight == 0)) //if the height is zero then the tiles above the current node simply wouldn't exist
         {
-            neighbors.Add(tiles[foundHeight - 1,foundWidth - 1]); //left top
             neighbors.Add(tiles[foundHeight - 1, foundWidth]); //directly left
-            neighbors.Add(tiles[foundHeight - 1, foundWidth + 1]); //bottom left
+            if (!(foundWidth == 0)) //make sure there is a node above
+            {
+                neighbors.Add(tiles[foundHeight - 1, foundWidth - 1]); //left top
+            }
+            if (!(foundWidth == (GridWidth - 1))) //make sure there is a node below
+            {
+                neighbors.Add(tiles[foundHeight - 1, foundWidth + 1]); //bottom left
+            }
         }
         //to the left
         if (!(foundWidth == 0)) //make sure there is a node above
@@ -152,9 +158,15 @@ public class PathFindingBehavior : MonoBehaviour
         //finally below
         if (!(foundHeight == (GridHeight - 1)))
         {
-            neighbors.Add(tiles[foundHeight + 1, foundWidth - 1]); //bottom left
             neighbors.Add(tiles[foundHeight + 1, foundWidth]); //directly below
-            neighbors.Add(tiles[foundHeight + 1, foundWidth + 1]); //bottom right
+            if (!(foundWidth == 0)) //make sure there is a node above
+            {
+                neighbors.Add(tiles[foundHeight + 1, foundWidth - 1]); //bottom left
+            }
+            if (!(foundWidth == (GridWidth - 1))) //make sure there is a node below
+            {
+                neighbors.Add(tiles[foundHeight + 1, foundWidth + 1]); //bottom right
+            }
         }
         return neighbors;
     }

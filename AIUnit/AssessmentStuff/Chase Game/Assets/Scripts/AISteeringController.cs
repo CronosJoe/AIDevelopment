@@ -115,6 +115,7 @@ public class AISteeringController : MonoBehaviour
             for(int i = 0; i < avoidObstacle.Count; i++) 
             {
                 steeringForce = WalkTheRoad(avoidObstacle[i]);
+                steeringForce.y = 0;
                 agent.velocity = Vector3.ClampMagnitude(agent.velocity + steeringForce, maxSpeed); //give em the clamps clamps
                 agent.UpdateMovement();
             }
