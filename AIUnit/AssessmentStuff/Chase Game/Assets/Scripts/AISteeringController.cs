@@ -17,7 +17,8 @@ public class AISteeringController : MonoBehaviour
     public PathFindingBehavior pathFinder;
     private Tile currentTile;
     private Tile targetTile;
-    
+    private Tile attackTile;
+    public GameObject obstaclePrefab;
     protected Vector3 CalculateSteeringForce()
     {
         Vector3 steeringForce = Vector3.zero;
@@ -32,7 +33,9 @@ public class AISteeringController : MonoBehaviour
         }
         else
         {
-            //this will be an attack / obstacle spawner
+            findAttackTile();
+            attackTile.isWalkable = false;
+            GameObject tmpObstacle = Instantiate(obstaclePrefab, attackTile.transform.position, transform.rotation);
         }
         //clamp it
         steeringForce = Vector3.ClampMagnitude(steeringForce, maxForce);
@@ -71,10 +74,6 @@ public class AISteeringController : MonoBehaviour
         {
             currentTile = hit.transform.GetComponent<Tile>();
         }
-        else 
-        {
-            Debug.Log("Something went very wrong");
-        }
 
     }
     public void findTargetTile() 
@@ -84,12 +83,22 @@ public class AISteeringController : MonoBehaviour
         RaycastHit hit;
         Vector3 angleFourtyFive = new Vector3(0, -1, 10);
         angleFourtyFive = agent.transform.TransformDirection(angleFourtyFive);
-        Debug.DrawRay(agent.transform.position, angleFourtyFive, Color.red);
         if (Physics.Raycast(transform.position, angleFourtyFive , out hit, Mathf.Infinity, layerMask))
         {
             targetTile = hit.transform.GetComponent<Tile>();
         }
 
+    }
+    public void findAttackTile() 
+    {
+        int layerMask = 1 << 8;
+        RaycastHit hit;
+        Vector3 angleFourtyFive = new Vector3(0, -1, 5);
+        angleFourtyFive = agent.transform.TransformDirection(angleFourtyFive);
+        if (Physics.Raycast(transform.position, angleFourtyFive, out hit, Mathf.Infinity, layerMask))
+        {
+           attackTile =  hit.transform.GetComponent<Tile>();
+        }
     }
     private void Start() //I don't see a world where I will ever "call" the Start method since it will be used when the program starts
     {

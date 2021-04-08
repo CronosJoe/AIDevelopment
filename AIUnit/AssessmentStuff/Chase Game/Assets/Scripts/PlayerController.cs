@@ -1,6 +1,7 @@
 ﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -41,5 +42,21 @@ public class PlayerController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controllerComponent.Move(velocity * Time.deltaTime);
+
+        if (Input.GetKey("escape"))//quitting the game
+        {
+            Application.Quit();
+        }
+    }
+    private void OnTriggerEnter(Collider other) //a a win/loss condition technically, kinda a fast implement
+    {
+        if (other.transform.tag == "Obstacle")
+        {
+            SceneManager.LoadScene("Loss");
+        }
+        if (other.transform.tag == "Runner")
+        {
+            SceneManager.LoadScene("Win");
+        }
     }
 }
